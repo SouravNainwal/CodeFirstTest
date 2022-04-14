@@ -23,24 +23,24 @@ namespace CodeFirst.Controllers
         {
             _db = db;
         }
-        public IActionResult Login()
-        {
-            var claims = new[] { new Claim(ClaimTypes.Name, res.Name),
-                                        new Claim(ClaimTypes.Email, res.Email) };
+        //public IActionResult Login()
+        //{
+        //    var claims = new[] { new Claim(ClaimTypes.Name, res.Name),
+        //                                new Claim(ClaimTypes.Email, res.Email) };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        //    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-            varauthProperties = new AuthenticationProperties
-            {
-                IsPersistent = true
-            };
-            HttpContext.SignInAsync(
-            CookieAuthenticationDefaults.AuthenticationScheme,
-                                new ClaimsPrincipal(identity),
-            authProperties);
+        //    varauthProperties = new AuthenticationProperties
+        //    {
+        //        IsPersistent = true
+        //    };
+        //    HttpContext.SignInAsync(
+        //    CookieAuthenticationDefaults.AuthenticationScheme,
+        //                        new ClaimsPrincipal(identity),
+        //    authProperties);
 
-            return View();
-        }
+        //    return View();
+        //}
         public IActionResult Table()
         {
             var res = _db.StuDetails.ToList();
