@@ -28,12 +28,11 @@ namespace CodeFirst
         {
             services.AddControllersWithViews();
             services.AddDbContext<StudentContext>(options => options.UseSqlServer(
-Configuration.GetConnectionString("DefaultConnection")
-
-               ));
+            Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(o => o.LoginPath = new PathString("/Home/Login"));
+     
 
         }
 
@@ -52,9 +51,11 @@ Configuration.GetConnectionString("DefaultConnection")
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
-            app.UseAuthentication();
+            
 
             app.UseEndpoints(endpoints =>
             {

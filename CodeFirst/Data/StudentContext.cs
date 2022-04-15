@@ -12,7 +12,7 @@ namespace CodeFirst.Data
 
 
         public DbSet<Student> StuDetails { get; set; }
-        public DbSet<Student> LoginDetail { get; set; }
+        public DbSet<loginT> LoginDetail { get; set; }
 
     }
 }

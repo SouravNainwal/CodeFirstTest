@@ -2,6 +2,8 @@
 using CodeFirst.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,51 +25,120 @@ namespace CodeFirst.Controllers
         {
             _db = db;
         }
-        //public IActionResult Login()
-        //{
-        //    var claims = new[] { new Claim(ClaimTypes.Name, res.Name),
-        //                                new Claim(ClaimTypes.Email, res.Email) };
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Login(loginT objUser)
+        {
+            var res = _db.LoginDetail.Where(a => a.Email == objUser.Email).FirstOrDefault();
 
-        //    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            if (res == null)
+            {
 
-        //    varauthProperties = new AuthenticationProperties
-        //    {
-        //        IsPersistent = true
-        //    };
-        //    HttpContext.SignInAsync(
-        //    CookieAuthenticationDefaults.AuthenticationScheme,
-        //                        new ClaimsPrincipal(identity),
-        //    authProperties);
+                TempData["Invalid"] = "Email is not found";
+            }
 
-        //    return View();
-        //}
+            else
+            {
+                if (res.Email == objUser.Email && objUser.Password == objUser.Password)
+                {
+
+                    var claims = new[] { /*new Claim(ClaimTypes.Name, res.Name),*/
+                                        new Claim(ClaimTypes.Email, res.Email) };
+
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true
+                    };
+                    HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(identity),
+                    authProperties);
+
+
+                    //HttpContext.Session.SetString("Name", objUser.Email);
+
+                    return RedirectToAction("Index", "Home");
+
+                }
+
+                else
+                {
+
+                    ViewBag.Inv = "Wrong Email Id or password";
+
+                    return View("Index");
+                }
+
+
+            }
+
+
+            return View("Index");
+        }
+        [HttpGet]
+        public IActionResult Registration()
+        {
+          return View();
+        }
+        [HttpPost]
+        public IActionResult Registration(loginT abc)
+        {
+            loginT cbj = new loginT();
+            cbj.Email = abc.Email;
+            cbj.Password=abc.Password;
+            cbj.ConfirmPassword=abc.ConfirmPassword;
+
+            _db.LoginDetail.Add(cbj);
+            _db.SaveChanges();
+            return RedirectToAction("Login");
+        }
+
+       
+            public IActionResult LogOut()
+            {
+                HttpContext.SignOutAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+
+                return View("Login");
+            }
+
+        
+        [Authorize] 
         public IActionResult Table()
         {
             var res = _db.StuDetails.ToList();
             return View(res);
         }
+        [Authorize]
         [HttpGet]
         public IActionResult Show()
         {
 
             return View();
         }
+        [Authorize]
         [HttpPost]
         public IActionResult Show(Student obj)
         {
-            Student abj = new Student();
-            abj.Id= obj.Id;
-            abj.Name= obj.Name;
-            abj.Email=obj.Email;
-            abj.Phone=obj.Phone;
+            //Student abj = new Student();
+            //abj.Id=obj.Id;
+            //abj.Name= obj.Name;
+            //abj.Email=obj.Email;
+            //abj.Phone=obj.Phone;
             if (obj.Id == 0)
             {
-                _db.StuDetails.Add(abj);
+                _db.StuDetails.Add(obj);
                 _db.SaveChanges();
             }
             else
             {
-                _db.Entry(abj).State = EntityState.Modified;
+                _db.Entry(obj).State = EntityState.Modified;
                 _db.SaveChanges();
             }
             return RedirectToAction("Table");
@@ -92,11 +163,12 @@ namespace CodeFirst.Controllers
 
             return View("Show",abj);
         }
+        [Authorize]
         public IActionResult Index()
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();
