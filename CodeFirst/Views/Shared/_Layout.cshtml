@@ -42,19 +42,19 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto py-0">
-                    <a asp-controller="Home" asp-action="Index" class="nav-item nav-link active">Home</a>                       
-                    <a asp-controller="Home" asp-action="Table" class="nav-item nav-link">Table</a>
-                    <a asp-controller="Home" asp-action="Show" class="nav-item nav-link">Show</a>
-                    <a asp-controller="Home" asp-action="Privacy" class="nav-item nav-link">Privacy</a>
-                     <a asp-controller="Home" asp-action="LogOut" class="nav-item nav-link">Logout</a>
-                    <a href="" class="nav-item nav-link bg-primary text-white px-5 ms-3 d-none d-lg-block">Get A Quote <i class="bi bi-arrow-right"></i></a>
+                    <a asp-controller="Home" asp-action="Index" class="nav-item nav-link ">Home</a>                       
+                    <a asp-controller="Home" asp-action="Table" class="nav-item nav-link ">Table</a>
+                    <a asp-controller="Home" asp-action="Show" class="nav-item nav-link ">Show</a>
+                    <a asp-controller="Home" asp-action="Privacy" class="nav-item nav-link " >Privacy</a>
+                    @* <a asp-controller="Home" asp-action="LogOut" class="nav-item nav-link">Logout</a>*@
+                    <a asp-controller="Home" asp-action="LogOut" class="nav-item nav-link bg-primary text-white px-5 ms-3 d-none d-lg-block">LogOut <i class="bi bi-arrow-right"></i></a>
                 </div>
             </div>
         </nav>
     </div>
     </header>
     <br />
-     <div class="container">
+     <div class="container" >
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
